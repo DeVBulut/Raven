@@ -12,13 +12,13 @@ namespace Raven
         {
             RequestManager requestManager = new RequestManager();
             string request = Console.ReadLine();
-            short requestType = requestManager.CheckRequest(request);
+            string requestType = requestManager.CheckRequest(request);
 
             switch (requestType)
             {
                 //Request Type : 1 Includes Volume KeyWord
-                case 1: 
-                    int volume = requestManager.GetVolume(request);
+                case "volume": 
+                    int volume = requestManager.GetVolumeText(request);
 
                     if (volume <= 100 && volume >= 0) { SetVolume(volume); break;}
                     else { Thread.Sleep(100); Console.WriteLine(">> Input an integer between 0-100");  Intro();  break; }

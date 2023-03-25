@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 
@@ -12,19 +13,18 @@ namespace Raven
             DesktopManager desktopManager = new DesktopManager();
             HouseManager houseManager = new HouseManager();
             ChaptGBTManager chaptGBTManager = new ChaptGBTManager();
+            AnimationManager animationManager = new AnimationManager();
 
 
             Thread.Sleep(350);
-            Console.WriteLine("> Which function would you like me to assist you ?");
-            Thread.Sleep(150);
-            //Future Note to Developer : think of a better solution than shortcuts.
-            Console.WriteLine("dsk : Desktop");
-            Thread.Sleep(150);
-            Console.WriteLine("hom : House");
-            Thread.Sleep(150);
-            Console.WriteLine("gbt : ChatGpt");
-            Thread.Sleep(150);
+
+            animationManager.slowText("> Which function would you like me to assist you ?", 30, true, 150);
+            animationManager.slowText("Desktop", 25, true, 100);
+            animationManager.slowText("House", 25, true, 100);
+            animationManager.slowText("ChatGpt", 25, true, 100);
+
             string request = Console.ReadLine();
+            
 
             switch(request)
             {
@@ -33,41 +33,49 @@ namespace Raven
                     Console.WriteLine("Navigating to Desktop Panel");
                     desktopManager.Intro();
                     break;
+
                 case "hom":
                     Thread.Sleep(150);
                     Console.WriteLine("Navigating to House Panel");
                     houseManager.Intro();
                     break;
-                case "gbt":
+
+                case "gpt":
                     Thread.Sleep(150);
-                    Console.WriteLine("Navigating to ChatGBT Panel");
+                    animationManager.LoadAnimation(5);
+                    Console.WriteLine("Navigating to ChatGPT Panel");
                     //note: Maybe not be in the final build
                     //chaptGBTManager.Intro();
                     break;
             }
         }
 
-        public void LoadAnimation()
+        public string CheckRequest(string request)
         {
-            for (int i = 0; i < 2; i++)  
+            string[] keywordList = {"volume", "dsk"};
+            
+            for (int i = 0; i < keywordList.Length; i++)
             {
-                for (int a = 0; a < 3; a++) { Console.Write("."); Thread.Sleep(100);}
-                Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r");
+                bool containsWord = request.IndexOf(keywordList[i], StringComparison.OrdinalIgnoreCase) > 0;
+                if (containsWord)
+                {
+                    // 'i' will be the index of the word found the in the request.
+                    switch (i)
+                    {
+                        case 1:
+                            return "volume";
+                        case 2:
+                            return "desktop";
+                    }
+                }
             }
+            return "null";
+
         }
 
-        public short CheckRequest(string request)
+        public int GetVolumeText(string request)
         {
-            bool contains = request.IndexOf("volume", StringComparison.OrdinalIgnoreCase) > 0;
-            //return 2 : maybe another keyword in the future.
-            //return 1 if contains keyword volume in text.
-            //return 0 if doesn't contain the keyword.
-            if (contains) {return 1;} else{return 0;}
-        }
-
-        public int GetVolume(string request)
-        {
-            if (CheckRequest(request) == 1)
+            if (CheckRequest(request) == "volume")
             {
                 int index = request.IndexOf("to");
                 string tempString = request.Substring(index + 2); 
@@ -76,5 +84,6 @@ namespace Raven
             }
             else { return 1000; }
         }
+
     }
 }

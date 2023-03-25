@@ -164,6 +164,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimationManager.cs" />
     <Compile Include="ChaptGBTManager.cs" />
     <Compile Include="DesktopManager.cs" />
     <Compile Include="HouseManager.cs" />
